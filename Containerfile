@@ -47,6 +47,8 @@ RUN \
 /usr/bin/python${PYV} -m pip install --no-cache-dir -r requirements.txt \
 && ansible-galaxy collection install -r requirements.yml
 
+RUN chgrp -R 0 /home && chmod -R g=u /etc/passwd /etc/group /home
+
 # Configure the podman wrapper
 COPY --chown=0:0 podman.py /usr/bin/podman.wrapper
 RUN chmod +x /usr/bin/podman.wrapper
