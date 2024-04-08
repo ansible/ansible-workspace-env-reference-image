@@ -37,6 +37,6 @@ jobs:
             password: ${{ secrets.GITHUB_TOKEN }}
     
       - name: Build the container image for ${{ matrix.platform }} and test it
-        uses: ansible/community-ansible-devspaces-image/.github/actions/build-test@main
+        uses: ansible-community/community-ansible-devspaces-image/.github/actions/build-test@main
         with:
           namespace: ansible-community
