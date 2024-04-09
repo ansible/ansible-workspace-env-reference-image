@@ -12,17 +12,7 @@ on:
 
 jobs:
   build-test:
-    runs-on: ${{ matrix.builder }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - builder: devtools-multiarch-builder
-            platform: linux/amd64
-          # UDI does not support arm64 yet
-          #- builder: ARM64
-          #  platform: linux/arm64
+    runs-on: devtools-multiarch-builder
     
     steps:
       - name: Login to GitHub Container Registry
@@ -32,7 +22,5 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
     
-      - name: Build the container image for ${{ matrix.platform }} and test it
-        uses: ansible-community/community-ansible-devspaces-image/.github/actions/build-test@main
-        with:
-          namespace: ansible
+      - name: Build the container image
+        uses: ansible-community/community-ansible-devspaces-image/.github/actions/build-release@main
