@@ -23,10 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - builder: devtools-multiarch-builder
-            platform: linux/amd64
-          #- builder: devtools-arm64-runner
-          #  platform: linux/arm64
+          #- builder: devtools-multiarch-builder
+          #  platform: linux/amd64
+          - builder: ARM64
+            platform: linux/arm64
     
     steps:
       - name: Login to GitHub Container Registry
