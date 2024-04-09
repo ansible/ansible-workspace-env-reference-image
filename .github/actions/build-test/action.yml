@@ -57,7 +57,7 @@ runs:
 
     - name: Push the built image to ${{ inputs.registry }} by digest for ${{ matrix.platform }}
       id: push-final
-      if: ${{ inputs.publish == "true" }}
+      if: ${{ inputs.publish == 'true' }}
       uses: docker/build-push-action@v5
       with:
         context: ${{ github.workspace }}/context
