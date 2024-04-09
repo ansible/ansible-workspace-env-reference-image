@@ -23,10 +23,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #- builder: devtools-multiarch-builder
-          #  platform: linux/amd64
-          - builder: ARM64
-            platform: linux/arm64
+          - builder: devtools-multiarch-builder
+            platform: linux/amd64
+          # UDI does not support arm64 yet
+          #- builder: ARM64
+          #  platform: linux/arm64
     
     steps:
       - name: Login to GitHub Container Registry
@@ -39,4 +40,4 @@ jobs:
       - name: Build the container image for ${{ matrix.platform }} and test it
         uses: ansible-community/community-ansible-devspaces-image/.github/actions/build-test@main
         with:
-          namespace: ansible-community
+          namespace: ansible
