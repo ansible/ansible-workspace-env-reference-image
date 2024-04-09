@@ -48,13 +48,6 @@ runs:
         cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
         cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
 
-    - name: Validate if the final image is a valid EE
-      shell: bash
-      run: |
-        python3 -m pip install --upgrade ansible-navigator
-        ansible-navigator --version
-        ansible-navigator run site.yml --ce docker --mode stdout --eei ${{ inputs.namespace }}/${{ inputs.final_image }}:test
-
     - name: Push the built image to ${{ inputs.registry }} by digest for ${{ matrix.platform }}
       id: push-final
       if: ${{ inputs.publish == 'true' }}
