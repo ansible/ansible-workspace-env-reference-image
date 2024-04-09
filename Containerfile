@@ -1,12 +1,12 @@
-FROM quay.io/devfile/universal-developer-image:ubi8-latest
+FROM quay.io/devfile/universal-developer-image:ubi9-latest
 
 ARG PYV=3.11
 
-LABEL org.opencontainers.image.source https://github.com/ansible-community/ansible-devspaces-image
+LABEL org.opencontainers.image.source https://github.com/ansible/community-ansible-devspaces-image
 LABEL org.opencontainers.image.authors "Ansible DevTools"
 LABEL org.opencontainers.image.vendor "Red Hat"
 LABEL org.opencontainers.image.licenses "GPL-3.0"
-LABEL org.opencontainers.image.description "A devspaces container image for Ansible."
+LABEL org.opencontainers.image.description "An OpenShift Dev Spaces container image for Ansible."
 
 USER 0
 
