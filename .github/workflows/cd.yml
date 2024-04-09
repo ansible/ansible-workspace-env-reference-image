@@ -1,51 +1,19 @@
 ---
-name: cd
+name: ci
 
 concurrency:
     group: ${{ github.head_ref || github.run_id }}
     cancel-in-progress: true
 
 on:
-  push:
-    tags:
-        - '*'
-  schedule:
-    - cron: '0 0 * * *'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
-    
+
 jobs:
-  build-test:
-    runs-on: ${{ matrix.builder }}
-    services:
-      registry:
-        image: registry:2
-        ports:
-            - 5000:5000
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - builder: devtools-multiarch-builder
-            platform: linux/amd64
-          - builder: devtools-arm64-runner
-            platform: linux/arm64
-    steps:
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build the container image for ${{ matrix.platform }} and test it
-        uses: ansible-community/community-ansible-devspaces-image/.github/actions/build-test@main
-        with:
-          registry: ghcr.io
-
-  publish:
-    runs-on: ubuntu-latest
-    needs: build-test
-    if: success('build-test')
+  build:
+    runs-on: devtools-multiarch-builder
+    
     steps:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -53,10 +21,9 @@ jobs:
             registry: ghcr.io
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push final manifest to ghcr.io
-        uses: ansible/community-ansible-dev-tools-container/.github/actions/merge-release@main
+    
+      - name: Build the container image
+        uses: ansible/community-ansible-devspaces-image/.github/actions/build-release@main
         with:
-          registry: ghcr.io
-          namespace: ansible-community
-          final_image: community-ansible-devspaces-image
+          publish: 'true'
+  
