@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - builder: ubuntu-latest
+          - builder: devtools-multiarch-builder
             platform: linux/amd64
           #- builder: devtools-arm64-runner
           #  platform: linux/arm64
