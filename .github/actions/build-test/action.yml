@@ -12,6 +12,9 @@ inputs:
   final_image:
     description: Name of the final image.
     default: community-ansible-devspaces-image
+  publish:
+    description: Publish the image to ghcr.io
+    default: "false"
 
 runs:
   using: composite
@@ -41,8 +44,6 @@ runs:
         load: true
         tags: |
           ${{ inputs.namespace }}/${{ inputs.final_image }}:test
-        build-contexts: |
-          ${{ inputs.final_image }}-base=docker-image://localhost:5000/${{ inputs.final_image }}-base:latest
         platforms: ${{ matrix.platform }}
         cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
         cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
@@ -52,35 +53,18 @@ runs:
       run: |
         python3 -m pip install --upgrade ansible-navigator
         ansible-navigator --version
-        ansible-navigator run ${{ github.workspace }}/site.yml --ce docker --mode stdout --eei ${{ inputs.namespace }}/${{ inputs.final_image }}:test 
+        ansible-navigator run site.yml --ce docker --mode stdout --eei ${{ inputs.namespace }}/${{ inputs.final_image }}:test
 
     - name: Push the built image to ${{ inputs.registry }} by digest for ${{ matrix.platform }}
       id: push-final
+      if: ${{ inputs.publish == "true" }}
       uses: docker/build-push-action@v5
       with:
         context: ${{ github.workspace }}/context
         provenance: false
         file: ${{ github.workspace }}/Containerfile
-        build-contexts: |
-          ${{ inputs.final_image }}-base=docker-image://localhost:5000/${{ inputs.final_image }}-base:latest
         platforms: ${{ matrix.platform }}
-        outputs: type=image,name=${{ inputs.registry }}/${{ inputs.namespace }}/${{ inputs.final_image }},push-by-digest=true,name-canonical=true,push=true
-
-    - name: Export digest
-      shell: bash
-      run: |
-        rm -rf /tmp/digests
-        mkdir -p /tmp/digests
-        digest="${{ steps.push-final.outputs.digest }}"
-        touch "/tmp/digests/${digest#sha256:}"
-
-    - name: Upload digest
-      uses: actions/upload-artifact@v4
-      with:
-        name: digests-${{ env.PLATFORM_PAIR }}
-        path: /tmp/digests/*
-        if-no-files-found: error
-        retention-days: 1
+        outputs: type=image,name=ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }},name-canonical=true,push=true
 
     # this step is ONLY needed for maintainence of self hosted runners
     - name: Cleanup docker
