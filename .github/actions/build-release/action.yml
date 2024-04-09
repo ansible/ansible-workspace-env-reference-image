@@ -34,8 +34,8 @@ runs:
         # network=host driver-opt needed to push to local registry
         driver-opts: network=host
 
-    - name: Build final image for ${{ matrix.platform }}
-      id: build-final
+    - name: Build devspaces image
+      id: build
       uses: docker/build-push-action@v5
       with:
         context: ${{ github.workspace }}/context
@@ -48,17 +48,13 @@ runs:
         cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
         cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
 
-    - name: Push the built image to ${{ inputs.registry }} by digest for ${{ matrix.platform }}
-      id: push-final
+    - name: Push the built image to ghcr.io
+      id: push
       if: ${{ inputs.publish == 'true' }}
-      uses: docker/build-push-action@v5
-      with:
-        context: ${{ github.workspace }}/context
-        provenance: false
-        file: ${{ github.workspace }}/Containerfile
-        platforms: ${{ matrix.platform }}
-        outputs: type=image,name=ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }},name-canonical=true,push=true
-
+      shell: bash
+      run: |
+        docker tag ${{ inputs.namespace }}/${{ inputs.final_image }}:test ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}:latest
+        docker push ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}:latest
     # this step is ONLY needed for maintainence of self hosted runners
     - name: Cleanup docker
       shell: bash
