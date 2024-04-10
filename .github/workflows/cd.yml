@@ -6,8 +6,11 @@ concurrency:
     cancel-in-progress: true
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    tags:
+      - '*'
+  schedule:
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
