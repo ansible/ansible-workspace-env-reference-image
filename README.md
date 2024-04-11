@@ -1,4 +1,4 @@
-[![cd](https://github.com/ansible/community-ansible-devspaces-image/actions/workflows/cd.yml/badge.svg?branch=main)](https://github.com/ansible/community-ansible-devspaces-image/actions/workflows/cd.yml)
+[![cd](https://github.com/ansible/community-ansible-devspaces-image/actions/workflows/cd.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible/community-ansible-devspaces-image/actions/workflows/cd.yml)
 
 # Community Ansible Dev Spaces Image
 
