@@ -10,7 +10,7 @@ For documentation on how to use these tools, please refer to [ADT docs](https://
 This image is built and published on a nightly basis. Grab this image using:
 
 ```bash
-podman pull ghcr.io/ansible/community-ansible-devspaces-image:latest
+podman pull ghcr.io/ansible/community-ansible-devspaces:latest
 ```
 
 ## Base Image
