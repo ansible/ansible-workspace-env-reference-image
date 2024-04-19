@@ -11,7 +11,7 @@ inputs:
     default: ansible
   final_image:
     description: Name of the final image.
-    default: community-ansible-devspaces-image
+    default: community-ansible-devspaces
   publish:
     description: Publish the image to ghcr.io
     default: "false"
