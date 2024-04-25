@@ -16,7 +16,6 @@ RUN <<EOF
     dnf -y update
     dnf install -y \
         tar \
-        echo \
         podman \
         fuse-overlayfs \
         openssh-clients \
@@ -25,12 +24,10 @@ RUN <<EOF
         which \
         git \
         dumb-init \
-        # ansible-pylibssh needs:
         gcc \
         git-core \
         libssh-devel \
         python3-markupsafe \
-        # ansible-navigator needs:
         ncurses \
         oniguruma-devel \
         python3-bcrypt \
