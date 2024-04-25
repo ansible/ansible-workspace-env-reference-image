@@ -11,35 +11,37 @@ LABEL org.opencontainers.image.description "An OpenShift Dev Spaces container im
 USER 0
 
 # install ansible-dev-tools specific packages
-RUN \
-dnf -y makecache && dnf -y update && \
-dnf install -y \
-tar \
-echo \
-podman \
-fuse-overlayfs \
-openssh-clients \
-zsh \
-util-linux-user \
-which \
-git \
-dumb-init \
-# ansible-pylibssh needs:
-gcc \
-git-core \
-libssh-devel \
-python3-markupsafe \
-# ansible-navigator needs:
-ncurses \
-oniguruma-devel \
-python3-bcrypt \
-python3-cffi \
-python3-pip \
-python3-pyyaml \
-python3-ruamel-yaml \
-python3-wheel \
---exclude container-selinux \
-    && dnf clean all
+RUN <<EOF
+    dnf -y makecache
+    dnf -y update
+    dnf install -y \
+        tar \
+        echo \
+        podman \
+        fuse-overlayfs \
+        openssh-clients \
+        zsh \
+        util-linux-user \
+        which \
+        git \
+        dumb-init \
+        # ansible-pylibssh needs:
+        gcc \
+        git-core \
+        libssh-devel \
+        python3-markupsafe \
+        # ansible-navigator needs:
+        ncurses \
+        oniguruma-devel \
+        python3-bcrypt \
+        python3-cffi \
+        python3-pip \
+        python3-pyyaml \
+        python3-ruamel-yaml \
+        python3-wheel \
+        --exclude container-selinux
+    dnf clean all
+EOF
 
 COPY ./requirements.txt requirements.txt
 COPY ./requirements.yml requirements.yml
