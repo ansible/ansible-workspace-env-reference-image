@@ -12,6 +12,7 @@ USER 0
 
 # install ansible-dev-tools specific packages
 RUN <<EOF
+    set -e
     dnf -y makecache
     dnf -y update
     dnf install -y \
@@ -29,7 +30,6 @@ RUN <<EOF
         libssh-devel \
         python3-markupsafe \
         ncurses \
-        oniguruma-devel \
         python3-bcrypt \
         python3-cffi \
         python3-pip \
