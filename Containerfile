@@ -12,7 +12,7 @@ USER 0
 
 # install ansible-dev-tools specific packages
 RUN \
-dnf -y makecache && dnf -y update \
+dnf -y makecache && dnf -y update && \
 dnf install -y \
 tar \
 echo \
