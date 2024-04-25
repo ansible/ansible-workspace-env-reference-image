@@ -44,8 +44,8 @@ runs:
         load: true
         tags: |
           ${{ inputs.namespace }}/${{ inputs.final_image }}:test
-        cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
-        cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
+        # cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
+        # cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
 
     - name: Push the built image to ghcr.io
       id: push-final
