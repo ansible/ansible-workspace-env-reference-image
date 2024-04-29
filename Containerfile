@@ -17,10 +17,8 @@ dnf install -y \
 tar \
 echo \
 podman \
-fuse-overlayfs \
 openssh-clients \
 zsh \
-util-linux-user \
 which \
 git \
 dumb-init \
