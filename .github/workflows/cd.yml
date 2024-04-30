@@ -24,6 +24,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build the container image
-        uses: ansible/community-ansible-devspaces-image/.github/actions/build-release@main
+        uses: ansible/ansible-workspace-env-reference-image/.github/actions/build-release@main
         with:
           publish: 'true'
