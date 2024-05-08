@@ -46,6 +46,15 @@ runs:
           ${{ inputs.namespace }}/${{ inputs.final_image }}:test
         # cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
         # cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
+    
+    - name: Select image tag based on event
+      shell: bash
+      run:
+        if [[ "${{ github.event_name }}" == 'release' ]]; then
+          echo "IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+        else
+          echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+        fi
 
     - name: Push the built image to ghcr.io
       id: push-final
@@ -56,7 +65,7 @@ runs:
         provenance: false
         file: ${{ github.workspace }}/Containerfile
         tags: |
-          ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}:latest
+          ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}:${{ env.IMAGE_TAG }}
         push: true
 
     # this step is ONLY needed for maintainence of self hosted runners
