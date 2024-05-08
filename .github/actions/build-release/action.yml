@@ -53,7 +53,10 @@ runs:
       uses: docker/metadata-action@v5
       with:
         images: ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}
-        tags:
+        flavor: |
+          latest=false
+        tags: |
+          type=raw,value=latest
           type=ref,event=tag
 
     - name: Push the built image to ghcr.io
