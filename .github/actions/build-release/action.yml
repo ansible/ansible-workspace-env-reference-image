@@ -49,7 +49,7 @@ runs:
     
     - name: Select image tag based on event
       shell: bash
-      run:
+      run: |
         if [[ "${{ github.event_name }}" == 'release' ]]; then
           echo "IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
         else
