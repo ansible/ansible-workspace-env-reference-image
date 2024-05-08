@@ -47,14 +47,26 @@ runs:
         # cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
         # cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
     
-    - name: Select image tag based on event
-      shell: bash
-      run: |
-        if [[ "${{ github.event_name }}" == 'release' ]]; then
-          echo "IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
-        else
-          echo "IMAGE_TAG=latest" >> $GITHUB_ENV
-        fi
+    - name: Docker meta
+      id: meta
+      if: ${{ inputs.publish == 'true' }}
+      uses: docker/metadata-action@v5
+      with:
+        images: ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}
+        tags:
+          latest
+          type=ref,event=tag
+
+    - name: Push the built image to ghcr.io
+      id: push-final
+      if: ${{ inputs.publish == 'true' }}
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ github.workspace }}/context
+        provenance: false
+        file: ${{ github.workspace }}/Containerfile
+        tags: ${{ steps.meta.outputs.tags }}
+        push: true
 
     - name: Push the built image to ghcr.io
       id: push-final
