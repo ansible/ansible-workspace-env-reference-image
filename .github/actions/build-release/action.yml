@@ -54,7 +54,6 @@ runs:
       with:
         images: ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}
         tags:
-          latest
           type=ref,event=tag
 
     - name: Push the built image to ghcr.io
