@@ -11,7 +11,7 @@ inputs:
     default: ansible
   final_image:
     description: Name of the final image.
-    default: community-ansible-devspaces
+    default: ansible-workspace-env-reference
   publish:
     description: Publish the image to ghcr.io
     default: "false"
@@ -46,6 +46,18 @@ runs:
           ${{ inputs.namespace }}/${{ inputs.final_image }}:test
         # cache-from: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
         # cache-to: type=gha,scope=build-${{ env.PLATFORM_PAIR }}
+    
+    - name: Docker meta
+      id: meta
+      if: ${{ inputs.publish == 'true' }}
+      uses: docker/metadata-action@v5
+      with:
+        images: ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}
+        flavor: |
+          latest=false
+        tags: |
+          type=raw,value=latest
+          type=ref,event=tag
 
     - name: Push the built image to ghcr.io
       id: push-final
@@ -55,13 +67,5 @@ runs:
         context: ${{ github.workspace }}/context
         provenance: false
         file: ${{ github.workspace }}/Containerfile
-        tags: |
-          ghcr.io/${{ inputs.namespace }}/${{ inputs.final_image }}:latest
+        tags: ${{ steps.meta.outputs.tags }}
         push: true
-
-    # this step is ONLY needed for maintainence of self hosted runners
-    - name: Cleanup docker
-      shell: bash
-      if: always()
-      run: |
-        docker system prune -af --volumes

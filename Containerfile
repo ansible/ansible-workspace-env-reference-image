@@ -2,7 +2,7 @@ FROM quay.io/devfile/universal-developer-image:ubi8-latest
 
 ARG PYV=3.11
 
-LABEL org.opencontainers.image.source https://github.com/ansible/community-ansible-devspaces-image
+LABEL org.opencontainers.image.source https://github.com/ansible/ansible-workspace-env-reference-image
 LABEL org.opencontainers.image.authors "Ansible DevTools"
 LABEL org.opencontainers.image.vendor "Red Hat"
 LABEL org.opencontainers.image.licenses "GPL-3.0"
